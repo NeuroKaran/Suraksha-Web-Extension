@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-whois
+requests
+langchain
+langchain-google-genai
+langchain-openai
+python-dotenv
+pydantic

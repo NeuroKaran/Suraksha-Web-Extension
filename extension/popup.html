@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suraksha</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="Suraksha-popup">
+    <!-- Header -->
+    <div class="Suraksha-popup-header">
+      <img src="icons/icon48.png" alt="Suraksha" width="28" height="28" style="border-radius: 50%;" />
+      <h1>Suraksha</h1>
+      <span class="version">v1.0</span>
+    </div>
+
+    <!-- Body -->
+    <div class="Suraksha-popup-body" id="popup-body">
+      <div class="Suraksha-popup-status" id="status-idle">
+        <div class="status-icon">🛡️</div>
+        <div class="status-text">
+          Open an email in Gmail to<br />start phishing analysis.
+        </div>
+      </div>
+
+      <div id="result-container" style="display:none;">
+        <div class="Suraksha-popup-result">
+          <div class="result-header">
+            <span class="result-verdict" id="result-verdict"></span>
+            <div class="result-score-circle" id="result-score-circle">
+              <span id="result-score"></span>
+            </div>
+          </div>
+          <div class="result-explanation" id="result-explanation"></div>
+          <div class="result-sender" id="result-sender"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="Suraksha-popup-footer">
+      Powered by AI &amp; OSINT &bull; Built for Hackathon 2026
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
