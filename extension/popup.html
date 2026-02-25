@@ -20,7 +20,13 @@
     <div class="Suraksha-popup-header">
       <img src="icons/icon48.png" alt="Suraksha" width="28" height="28" style="border-radius: 50%;" />
       <h1>Suraksha</h1>
-      <span class="version">v1.0</span>
+      <span class="version">v2.0</span>
+    </div>
+
+    <!-- Protection Status -->
+    <div class="Suraksha-popup-protection" id="protection-status">
+      <span class="protection-dot active"></span>
+      <span class="protection-label">Protection Active</span>
     </div>
 
     <!-- Body -->
@@ -28,20 +34,37 @@
       <div class="Suraksha-popup-status" id="status-idle">
         <div class="status-icon">🛡️</div>
         <div class="status-text">
-          Open an email in Gmail to<br />start phishing analysis.
+          Browse the web safely — Suraksha<br />protects you everywhere.
         </div>
       </div>
 
-      <div id="result-container" style="display:none;">
+      <!-- Email Analysis Result -->
+      <div id="email-result-container" style="display:none;">
         <div class="Suraksha-popup-result">
+          <div class="result-type-badge">📧 Email Analysis</div>
           <div class="result-header">
-            <span class="result-verdict" id="result-verdict"></span>
-            <div class="result-score-circle" id="result-score-circle">
-              <span id="result-score"></span>
+            <span class="result-verdict" id="email-result-verdict"></span>
+            <div class="result-score-circle" id="email-result-score-circle">
+              <span id="email-result-score"></span>
             </div>
           </div>
-          <div class="result-explanation" id="result-explanation"></div>
-          <div class="result-sender" id="result-sender"></div>
+          <div class="result-explanation" id="email-result-explanation"></div>
+          <div class="result-sender" id="email-result-sender"></div>
+        </div>
+      </div>
+
+      <!-- Page Analysis Result -->
+      <div id="page-result-container" style="display:none;">
+        <div class="Suraksha-popup-result">
+          <div class="result-type-badge" id="page-type-badge">🌐 Page Analysis</div>
+          <div class="result-header">
+            <span class="result-verdict" id="page-result-verdict"></span>
+            <div class="result-score-circle" id="page-result-score-circle">
+              <span id="page-result-score"></span>
+            </div>
+          </div>
+          <div class="result-explanation" id="page-result-explanation"></div>
+          <div class="result-meta" id="page-result-meta"></div>
         </div>
       </div>
     </div>

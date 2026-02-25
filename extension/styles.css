@@ -28,6 +28,7 @@
     transform: translateY(-20px);
     max-height: 0;
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -41,6 +42,7 @@
     transform: translateY(0);
     max-height: 300px;
   }
+
   to {
     opacity: 0;
     transform: translateY(-20px);
@@ -141,9 +143,91 @@
 }
 
 @keyframes Suraksha-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
+
+/* ─── Score Description ─────────────────────────────────────── */
+
+.Suraksha-score-description {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.Suraksha-score-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.Suraksha-score-label {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+}
+
+.Suraksha-score-value {
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.Suraksha-score-label.score-safe,
+.Suraksha-score-value.score-safe {
+  color: #6ee7b7;
+}
+
+.Suraksha-score-label.score-suspicious,
+.Suraksha-score-value.score-suspicious {
+  color: #fcd34d;
+}
+
+.Suraksha-score-label.score-dangerous,
+.Suraksha-score-value.score-dangerous {
+  color: #fca5a5;
+}
+
+.Suraksha-score-bar {
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.Suraksha-score-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.Suraksha-score-fill.score-safe {
+  background: linear-gradient(90deg, #34d399, #6ee7b7);
+}
+
+.Suraksha-score-fill.score-suspicious {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.Suraksha-score-fill.score-dangerous {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.Suraksha-score-desc {
+  font-size: 12px;
+  opacity: 0.75;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* ─── Detail Items ──────────────────────────────────────────── */
 
 .Suraksha-detail-item {
   margin: 6px 0;
@@ -171,13 +255,19 @@
   background: linear-gradient(90deg, #4a5568, #718096, #4a5568);
   background-size: 200% 100%;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: Suraksha-shimmer 1.5s infinite;
 }
 
 @keyframes Suraksha-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* ─── State: Safe (Green) ───────────────────────────────────── */
@@ -226,13 +316,20 @@
 }
 
 @keyframes Suraksha-pulse {
-  0%, 100% { box-shadow: 0 2px 12px rgba(185, 28, 28, 0.2); }
-  50% { box-shadow: 0 2px 24px rgba(185, 28, 28, 0.45); }
+
+  0%,
+  100% {
+    box-shadow: 0 2px 12px rgba(185, 28, 28, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 2px 24px rgba(185, 28, 28, 0.45);
+  }
 }
 
 #Suraksha-banner.Suraksha-dangerous {
   animation: Suraksha-slide-in 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-             Suraksha-pulse 2s infinite;
+    Suraksha-pulse 2s infinite;
 }
 
 /* ─── State: Error ──────────────────────────────────────────── */
@@ -280,6 +377,7 @@
   font-weight: 700;
   background: linear-gradient(135deg, #818cf8, #a78bfa);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -342,9 +440,20 @@
   font-weight: 800;
 }
 
-.result-score-circle.safe { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-.result-score-circle.suspicious { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-.result-score-circle.dangerous { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+.result-score-circle.safe {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.result-score-circle.suspicious {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.result-score-circle.dangerous {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
 
 .Suraksha-popup-result .result-explanation {
   font-size: 13px;
@@ -373,4 +482,202 @@
 .Suraksha-popup-footer a {
   color: #818cf8;
   text-decoration: none;
+}
+
+/* ─── Feedback Buttons ─────────────────────────────────────── */
+
+.Suraksha-feedback {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 10px 64px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  opacity: 0.9;
+  animation: Suraksha-fade-in 0.3s ease;
+}
+
+.Suraksha-feedback-label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.Suraksha-feedback-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  line-height: 1;
+}
+
+.Suraksha-feedback-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.1);
+}
+
+.Suraksha-feedback-btn:active {
+  transform: scale(0.95);
+}
+
+.Suraksha-feedback-thanks {
+  font-size: 12px;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Page Banner — floating bottom-right for non-Gmail pages
+   ═══════════════════════════════════════════════════════════════ */
+
+#Suraksha-banner.Suraksha-page-banner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  left: auto;
+  top: auto;
+  width: 400px;
+  max-width: calc(100vw - 40px);
+  z-index: 2147483647;
+  margin: 0;
+  border-radius: 16px;
+  font-family: 'Google Sans', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: Suraksha-slide-up 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+@keyframes Suraksha-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#Suraksha-banner.Suraksha-page-banner.Suraksha-hidden {
+  animation: Suraksha-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes Suraksha-slide-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(40px);
+    pointer-events: none;
+  }
+}
+
+/* Page banner inherits state colors from the main banner */
+#Suraksha-banner.Suraksha-page-banner.Suraksha-loading {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #e2e8f0;
+}
+
+#Suraksha-banner.Suraksha-page-banner.Suraksha-loading .Suraksha-message {
+  background: linear-gradient(90deg, #4a5568, #718096, #4a5568);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: Suraksha-shimmer 1.5s infinite;
+}
+
+#Suraksha-banner.Suraksha-page-banner.Suraksha-safe {
+  background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+  color: #ecfdf5;
+}
+
+#Suraksha-banner.Suraksha-page-banner.Suraksha-suspicious {
+  background: linear-gradient(135deg, #78350f 0%, #92400e 50%, #b45309 100%);
+  color: #fffbeb;
+}
+
+#Suraksha-banner.Suraksha-page-banner.Suraksha-dangerous {
+  background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #b91c1c 100%);
+  color: #fef2f2;
+  animation: Suraksha-slide-up 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    Suraksha-pulse 2s infinite;
+}
+
+#Suraksha-banner.Suraksha-page-banner.Suraksha-error {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #94a3b8;
+}
+
+/* ─── Popup Protection Status ──────────────────────────────── */
+
+.Suraksha-popup-protection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(16, 185, 129, 0.08);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06);
+  font-size: 12px;
+}
+
+.protection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #475569;
+}
+
+.protection-dot.active {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+  animation: Suraksha-dot-pulse 2s infinite;
+}
+
+@keyframes Suraksha-dot-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 4px rgba(16, 185, 129, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  }
+}
+
+.protection-label {
+  color: #6ee7b7;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ─── Result Type Badge ────────────────────────────────────── */
+
+.result-type-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #818cf8;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.result-meta {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
 }

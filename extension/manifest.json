@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Suraksha — AI Phishing Detector",
-  "version": "1.0.0",
-  "description": "AI-powered phishing detection that analyzes emails in real-time using OSINT tools and LLM intelligence.",
+  "name": "Suraksha — AI Web Safety Shield",
+  "version": "2.0.0",
+  "description": "AI-powered web safety that detects phishing emails, risky webpages, and suspicious interactions using OSINT tools and LLM intelligence.",
   "permissions": [
     "activeTab",
     "storage"
@@ -20,6 +20,23 @@
         "https://mail.google.com/*"
       ],
       "js": [
+        "page_detectors.js",
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "exclude_matches": [
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "page_detectors.js",
         "content.js"
       ],
       "css": [
@@ -47,7 +64,7 @@
         "icons/*"
       ],
       "matches": [
-        "https://mail.google.com/*"
+        "<all_urls>"
       ]
     }
   ]

@@ -97,7 +97,16 @@ def format_osint_data(osint_report: OSINTReport) -> str:
             if ls.error:
                 sections.append(f"  - {ls.url} — ⚠️ {ls.error}")
             elif ls.is_flagged:
-                sections.append(f"  - {ls.url} — 🚩 FLAGGED ({ls.malicious_count} malicious, {ls.suspicious_count} suspicious)")
+                flag_text = f"  - {ls.url} — 🚩 FLAGGED ({ls.malicious_count} malicious, {ls.suspicious_count} suspicious)"
+                if ls.malware_types:
+                    flag_text += f"\n    Malware type: {', '.join(ls.malware_types)}"
+                if ls.threat_names:
+                    flag_text += f"\n    Threats: {', '.join(ls.threat_names[:3])}"
+                if ls.detection_engines:
+                    flag_text += f"\n    Detected by: {', '.join(ls.detection_engines[:5])}"
+                if ls.categories:
+                    flag_text += f"\n    Categories: {', '.join(ls.categories)}"
+                sections.append(flag_text)
             else:
                 sections.append(f"  - {ls.url} — ✅ Clean")
 
@@ -228,19 +237,74 @@ URGENCY_KEYWORDS = [
     "urgent", "immediately", "right now", "asap", "within 24 hours",
     "suspended", "locked", "verify your", "confirm your", "click here",
     "act now", "limited time", "expire", "deadline", "warning",
-    "unauthorized", "suspicious activity", "unusual sign-in"
+    "unauthorized", "suspicious activity", "unusual sign-in",
+    "verify your identity", "account suspension", "payment failed",
+    "action required", "final notice", "last chance", "account compromised",
+    "security alert", "unusual activity", "sign-in attempt"
 ]
 
 PHISHING_KEYWORDS = [
     "password", "bank account", "credit card", "social security",
     "ssn", "login credentials", "wire transfer", "bitcoin",
     "gift card", "prize", "winner", "lottery", "inheritance",
-    "nigerian prince", "bank details", "routing number"
+    "bank details", "routing number", "one-time code", "otp",
+    "verify your account", "update your payment", "cryptocurrency",
+    "investment opportunity", "tax refund", "irs", "hmrc"
+]
+
+# Brand names commonly impersonated in phishing emails
+IMPERSONATION_BRANDS = [
+    "google", "microsoft", "apple", "paypal", "amazon", "netflix",
+    "facebook", "instagram", "whatsapp", "linkedin", "twitter",
+    "wells fargo", "chase", "bank of america", "citibank",
+    "dropbox", "zoom", "slack", "adobe", "dhl", "fedex", "ups",
+    "irs", "hmrc", "gov"
 ]
 
 
+def has_homoglyphs(text: str) -> bool:
+    """
+    Detect non-ASCII look-alike characters (homograph attacks).
+    Common in phishing: using Cyrillic 'а' instead of Latin 'a',
+    or special Unicode characters that look like ASCII.
+    Free — uses built-in Python unicodedata module.
+    """
+    import unicodedata
+    for char in text:
+        if char in '.-@_':
+            continue
+        category = unicodedata.category(char)
+        # Normal ASCII letters/digits are Ll, Lu, Nd
+        # Non-ASCII look-alikes will have different categories or
+        # will have a different script
+        if ord(char) > 127:
+            return True
+    return False
+
+
+def check_display_name_spoof(sender_email: str) -> str | None:
+    """
+    Detect display name spoofing — when email claims to be from a major brand
+    but the domain doesn't match. Example: "Google Security" <random@evil.com>
+    Returns the impersonated brand name if detected, None otherwise.
+    """
+    domain = sender_email.split("@")[-1].lower()
+    
+    for brand in IMPERSONATION_BRANDS:
+        # If the domain doesn't contain the brand name but is trying to look like it
+        # Check if the sender's email local part or domain mimics the brand
+        local_part = sender_email.split("@")[0].lower()
+        if brand in local_part and brand not in domain:
+            return brand
+    
+    return None
+
+
 def analyze_with_rules(sender: str, subject: str, body: str, osint_report: OSINTReport) -> dict:
-    """Rule-based phishing heuristic as a fallback when no LLM is available."""
+    """
+    Enhanced rule-based phishing heuristic as a fallback when no LLM is available.
+    Includes: keyword matching, OSINT signals, homograph detection, and brand spoofing.
+    """
     score = 80  # Start optimistic
     reasons = []
 
@@ -264,6 +328,18 @@ def analyze_with_rules(sender: str, subject: str, body: str, osint_report: OSINT
         score -= 10
         reasons.append("Possible sensitive data request")
 
+    # ── NEW: Homograph/punycode detection ──
+    sender_domain = sender.split("@")[-1] if "@" in sender else sender
+    if has_homoglyphs(sender_domain):
+        score -= 30
+        reasons.append(f"Sender domain contains non-ASCII look-alike characters (possible homograph attack)")
+
+    # ── NEW: Display name / sender spoofing ──
+    spoofed_brand = check_display_name_spoof(sender)
+    if spoofed_brand:
+        score -= 25
+        reasons.append(f"Sender appears to impersonate '{spoofed_brand}' but email domain doesn't match")
+
     # Check OSINT: domain age
     if osint_report.domain_age and osint_report.domain_age.is_suspicious:
         score -= 20
@@ -279,6 +355,13 @@ def analyze_with_rules(sender: str, subject: str, body: str, osint_report: OSINT
     if osint_report.email_breach and osint_report.email_breach.is_breached:
         score -= 10
         reasons.append("Sender email found in data breaches")
+
+    # ── NEW: Excessive URL count ──
+    import re
+    url_count = len(re.findall(r'https?://[^\s<>"\')\]]+', body, re.IGNORECASE))
+    if url_count > 5:
+        score -= 10
+        reasons.append(f"Email contains {url_count} URLs (unusually high)")
 
     # Clamp score
     score = max(1, min(100, score))
